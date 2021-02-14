@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 import mock
 import unittest
@@ -122,7 +122,7 @@ class EvtDevAgentTest(unittest.TestCase):
         patcher = mock.patch('evdev.device.InputDevice', MockedInputDevice)
         self.mock_input_device = patcher.start()
         self.addCleanup(patcher.stop)
-        self.devices = map(ProxyInputDevice, self.device_names)
+        self.devices = list(map(ProxyInputDevice, self.device_names))
         self.agent = agent.EvtDevAgent(self.core, self.dev_dir,
                                        self.device_names, self.vol_step_size,
                                        self.refresh)

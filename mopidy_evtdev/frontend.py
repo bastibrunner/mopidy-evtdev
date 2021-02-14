@@ -1,8 +1,8 @@
-from __future__ import unicode_literals
+
 
 import logging
 import pykka
-from agent import EvtDevAgent
+from .agent import EvtDevAgent
 
 logger = logging.getLogger(__name__)
 

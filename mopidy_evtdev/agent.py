@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 import logging
 import gobject
@@ -61,7 +61,7 @@ class EvtDevAgent(object):
                 evdev.events.KeyEvent)
 
     def _is_supported_ecode(self, ecode):
-        return ecode in self.ecode_map.keys()
+        return ecode in list(self.ecode_map.keys())
 
     def _fd_ready_callback(self, source, cb_condition, input_device):
         try:
@@ -174,7 +174,7 @@ class EvtDevAgent(object):
             logger.info('Set mute: %s', state[mute])
 
     def _next_track(self):
-        self.core.playback.next()
+        next(self.core.playback)
         logger.info('Selected next track')
 
     def _prev_track(self):
@@ -183,7 +183,7 @@ class EvtDevAgent(object):
 
     @staticmethod
     def _open_device_list(devices):
-        return map(evdev.device.InputDevice, devices)
+        return list(map(evdev.device.InputDevice, devices))
 
     def _close_input_device(self, device_name):
         try:
@@ -199,8 +199,8 @@ class EvtDevAgent(object):
         logger.debug('Event sources: %s', self.event_sources)
 
     def _register_io_watches(self):
-        for device_name in self.curr_input_devices.keys():
-            if (device_name not in self.event_sources.keys()):
+        for device_name in list(self.curr_input_devices.keys()):
+            if (device_name not in list(self.event_sources.keys())):
                 logger.debug('Adding io watch for: %s', device_name)
                 device = self.curr_input_devices[device_name]
                 tag = gobject.io_add_watch(device.fd, gobject.IO_IN,
@@ -215,12 +215,12 @@ class EvtDevAgent(object):
             gobject.source_remove(tag)
 
     def _deregister_event_sources(self):
-        for source in self.event_sources.keys():
+        for source in list(self.event_sources.keys()):
             self._deregister_event_source(source)
 
     def _cleanup_stale_devices(self):
         device_list = evdev.util.list_devices(self.dev_dir)
-        for device_name in self.curr_input_devices.keys():
+        for device_name in list(self.curr_input_devices.keys()):
             if (device_name not in device_list):
                 self._deregister_event_source(device_name)
                 self._close_input_device(device_name)
@@ -244,18 +244,18 @@ class EvtDevAgent(object):
             # more logical (real name is actually 'BTS-06' but this is not
             # available from evdev).
             if ((not self.permitted_devices or
-                 unicode(device.fn) in self.permitted_devices or
-                 unicode(device.name) in self.permitted_devices or
-                 unicode(device.phys) in self.permitted_devices
-                 ) and device.fn not in self.curr_input_devices.keys()):
+                 str(device.fn) in self.permitted_devices or
+                 str(device.name) in self.permitted_devices or
+                 str(device.phys) in self.permitted_devices
+                 ) and device.fn not in list(self.curr_input_devices.keys())):
                 self.curr_input_devices[device.fn] = device
             else:
                 device.close()
             logger.debug('Registered devices: %s',
-                         self.curr_input_devices.keys())
+                         list(self.curr_input_devices.keys()))
 
     def _close_current_input_devices(self):
         logger.debug('Closing: %s',
-                     self.curr_input_devices.keys())
-        for device_name in self.curr_input_devices.keys():
+                     list(self.curr_input_devices.keys()))
+        for device_name in list(self.curr_input_devices.keys()):
             self._close_input_device(device_name)
