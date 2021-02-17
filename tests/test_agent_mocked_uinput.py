@@ -131,43 +131,43 @@ class EvtDevAgentTest(unittest.TestCase):
         self.agent.stop()
 
     def test_play(self):
-        self.core.playback.state.get.return_value = PlaybackState.STOPPED
+        self.core.playback.get_state.return_value = PlaybackState.STOPPED
         self.devices[0].send_play()
         self.core.playback.play.assert_called_once_with()
-        self.core.playback.state.get.return_value = PlaybackState.PAUSED
+        self.core.playback.get_state.return_value = PlaybackState.PAUSED
         self.devices[0].send_play()
         self.core.playback.resume.assert_called_once_with()
-        self.core.playback.state.get.return_value = PlaybackState.PLAYING
+        self.core.playback.get_state.return_value = PlaybackState.PLAYING
         self.devices[0].send_play()
         self.core.playback.pause.assert_called_once_with()
         self.core.reset_mock()
-        self.core.playback.state.get.return_value = PlaybackState.STOPPED
+        self.core.playback.get_state.return_value = PlaybackState.STOPPED
         self.devices[0].send_play_cd()
         self.core.playback.play.assert_called_once_with()
-        self.core.playback.state.get.return_value = PlaybackState.PAUSED
+        self.core.playback.get_state.return_value = PlaybackState.PAUSED
         self.devices[0].send_play_cd()
         self.core.playback.resume.assert_called_once_with()
-        self.core.playback.state.get.return_value = PlaybackState.PLAYING
+        self.core.playback.get_state.return_value = PlaybackState.PLAYING
         self.devices[0].send_play_cd()
         self.core.playback.pause.assert_called_once_with()
         self.core.reset_mock()
-        self.core.playback.state.get.return_value = PlaybackState.STOPPED
+        self.core.playback.get_state.return_value = PlaybackState.STOPPED
         self.devices[0].send_play_pause()
         self.core.playback.play.assert_called_once_with()
-        self.core.playback.state.get.return_value = PlaybackState.PAUSED
+        self.core.playback.get_state.return_value = PlaybackState.PAUSED
         self.devices[0].send_play_pause()
         self.core.playback.resume.assert_called_once_with()
-        self.core.playback.state.get.return_value = PlaybackState.PLAYING
+        self.core.playback.get_state.return_value = PlaybackState.PLAYING
         self.devices[0].send_play_pause()
         self.core.playback.pause.assert_called_once_with()
         self.core.reset_mock()
-        self.core.playback.state.get.return_value = PlaybackState.STOPPED
+        self.core.playback.get_state.return_value = PlaybackState.STOPPED
         self.devices[0].send_pause()
         self.core.playback.play.assert_called_once_with()
-        self.core.playback.state.get.return_value = PlaybackState.PAUSED
+        self.core.playback.get_state.return_value = PlaybackState.PAUSED
         self.devices[0].send_pause()
         self.core.playback.resume.assert_called_once_with()
-        self.core.playback.state.get.return_value = PlaybackState.PLAYING
+        self.core.playback.get_state.return_value = PlaybackState.PLAYING
         self.devices[0].send_pause()
         self.core.playback.pause.assert_called_once_with()
 
