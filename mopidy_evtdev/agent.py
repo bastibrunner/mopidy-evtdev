@@ -133,10 +133,10 @@ class EvtDevAgent(object):
 
     def _play_pause(self):
         state = self.core.playback.get_state()
-        if (state == PlaybackState.PLAYING):
+        if (state.get() == "playing"):
             self.core.playback.pause()
             logger.info('Paused playback')
-        elif (state == PlaybackState.PAUSED):
+        elif (state.get() == "paused"):
             self.core.playback.resume()
             logger.info('Resumed playback')
         else:
